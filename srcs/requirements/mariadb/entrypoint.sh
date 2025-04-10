@@ -2,9 +2,10 @@
 set -e
 
 # Start MariaDB in the background
-service mariadb start
+mysqld_safe --skip-networking &
+pid="$!"
 
-# Wait for MariaDB to be fully ready
+# Wait for MariaDB to be ready
 until mysqladmin ping --silent; do
     echo "Waiting for MariaDB to start..."
     sleep 2
@@ -12,7 +13,7 @@ done
 
 echo "MariaDB is up and running!"
 
-# Run initialization only if the database does not exist
+# Run initialization if necessary
 if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
     echo "Initializing database..."
     mysql -u root -p"${MYSQL_ROOT_PASSWORD}" <<EOF
@@ -27,7 +28,7 @@ else
 fi
 
 # Stop the background MariaDB process
-service mariadb stop
+mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
 
-# Start MariaDB in the foreground as the main process
-exec mariadbd
+# Start MariaDB in the foreground
+exec mysqld

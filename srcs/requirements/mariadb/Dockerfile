@@ -13,15 +13,15 @@ RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld && chmod 775 /run/m
 # RUN docker-entrypoint-initdb.d/init.sql
 
 COPY ./my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY ./init.sh .
+COPY ./entrypoint.sh .
 # RUN service mariadb start
 
 # RUN service mariadb stop
 
 # Set user and expose port
 EXPOSE 3306
-RUN chmod +x ./init.sh
-ENTRYPOINT ["./init.sh"]
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
 
 # Start MariaDB
 CMD ["mariadbd"]

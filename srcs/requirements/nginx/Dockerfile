@@ -14,7 +14,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
 
 # Copy the custom Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # Expose HTTP and HTTPS ports
 EXPOSE 80 443

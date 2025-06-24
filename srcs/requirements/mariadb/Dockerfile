@@ -1,5 +1,5 @@
 # Use the second-to-last Debian version
-FROM debian:bookworm
+FROM debian:bullseye
 
 # Install MariaDB server
 RUN apt-get update && apt-get install -y mariadb-server && \
@@ -12,8 +12,8 @@ RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld && chmod 775 /run/m
 # COPY ./init.sql /docker-entrypoint-initdb.d/
 # RUN docker-entrypoint-initdb.d/init.sql
 
-COPY ./my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-COPY ./entrypoint.sh .
+COPY conf/my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY tools/entrypoint.sh .
 # RUN service mariadb start
 
 # RUN service mariadb stop

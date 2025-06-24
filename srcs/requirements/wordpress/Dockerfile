@@ -29,7 +29,7 @@
 # CMD ["php-fpm7.4", "--nodaemonize"]
 
 # Use Debian 11 as the base image
-FROM debian:11
+FROM debian:bullseye
 
 # Install PHP, PHP-FPM, and required extensions
 RUN apt-get update && apt-get install -y \
@@ -57,11 +57,11 @@ RUN mkdir -p /var/www/html \
     && rm latest.tar.gz
 
 # Copy startup script into the container
-COPY entrypoint.sh /entrypoint.sh
+COPY tools/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Copy PHP-FPM configuration
-COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # Expose port 9000 for PHP-FPM
 EXPOSE 9000

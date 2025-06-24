@@ -20,10 +20,11 @@
 
 # volumes:
 #   wordpress_data:
-version: '3.8'
 
 services:
   nginx:
+    container_name: nginx_container
+    image: nginx
     build: ./requirements/nginx
     ports:
       - "80:80"
@@ -32,31 +33,41 @@ services:
       - wordpress-php-fpm
     volumes:
       - wordpress_data:/var/www/html
+    networks:
+      - custom_network
     restart: always
 
   wordpress-php-fpm:
+    container_name: wordpress_container
+    image: wordpress-php-fpm
     build: ./requirements/wordpress
     expose:
       - "9000"
     environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DB_USER: wp_user
-      WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_HOST:  ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
     volumes:
       - wordpress_data:/var/www/html
+    networks:
+      - custom_network
     restart: always
 
   mariadb:
+    container_name: mariadb_container
+    image: mariadb
     build: ./requirements/mariadb
     environment:
-      MYSQL_ROOT_USER: root_user
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_password
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - wordpress_db_data:/var/lib/mysql
+    networks:
+      - custom_network
     restart: always
 
 volumes:
@@ -64,5 +75,4 @@ volumes:
   wordpress_data:
 
 networks:
-  wordpress_network:
-
+  custom_network:

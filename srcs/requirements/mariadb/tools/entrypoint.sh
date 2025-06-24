@@ -4,10 +4,10 @@
 # Start MariaDB service
 echo "Starting MariaDB service..."
 service mariadb start
-until mariadb -u root -e "SELECT 1" &> /dev/null; do
-    echo "Waiting for MariaDB to be ready..."
-    sleep 2
-done
+# until mariadb -u root -e "SELECT 1" &> /dev/null; do
+#     echo "Waiting for MariaDB to be ready..."
+#     sleep 2
+# done
 
 echo "Initializing database..."
 

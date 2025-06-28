@@ -1,26 +1,3 @@
-# version: '3.8'
-
-# services:
-#   nginx:
-#     build: ./requirements/nginx
-#     ports:
-#       - "80:80"
-#       - "443:443"
-#     depends_on:
-#       - wordpress-php-fpm
-#     volumes:
-#       - wordpress_data:/var/www/html
-
-#   wordpress-php-fpm:
-#     build: ./requirements/wordpress
-#     expose:
-#       - "9000"
-#     volumes:
-#       - wordpress_data:/var/www/html
-
-# volumes:
-#   wordpress_data:
-
 services:
   nginx:
     container_name: nginx_container
@@ -43,11 +20,9 @@ services:
     build: ./requirements/wordpress
     expose:
       - "9000"
-    environment:
-      WORDPRESS_DB_HOST:  ${WORDPRESS_DB_HOST}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    env_file:
+      - .env
+
     volumes:
       - wordpress_data:/var/www/html
     networks:
@@ -58,12 +33,8 @@ services:
     container_name: mariadb_container
     image: mariadb
     build: ./requirements/mariadb
-    environment:
-      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    env_file:
+      - .env
     volumes:
       - wordpress_db_data:/var/lib/mysql
     networks:

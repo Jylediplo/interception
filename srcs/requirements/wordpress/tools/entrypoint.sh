@@ -69,22 +69,22 @@ if ! $(wp core is-installed --allow-root --path=/var/www/html 2>/dev/null); then
     # Install WordPress core
     wp core install \
         --path=/var/www/html \
-        --url="${WORDPRESS_URL:-localhost}" \
-        --title="${WORDPRESS_TITLE:-WordPress Site}" \
-        --admin_user="${WORDPRESS_ADMIN_USER:-admin}" \
-        --admin_password="${WORDPRESS_ADMIN_PASSWORD:-admin}" \
-        --admin_email="${WORDPRESS_ADMIN_EMAIL:-admin@example.com}" \
+        --url="${WORDPRESS_URL}" \
+        --title="${WORDPRESS_TITLE}" \
+        --admin_user="${WORDPRESS_ADMIN_USER}" \
+        --admin_password="${WORDPRESS_ADMIN_PASSWORD}" \
+        --admin_email="${WORDPRESS_ADMIN_EMAIL}" \
         --skip-email \
         --allow-root
 
     echo "Creating standard user..."
-    wp user create "${WORDPRESS_BASIC_USER:-user}" "${WORDPRESS_BASIC_EMAIL:-user@example.com}" \
-        --user_pass="${WORDPRESS_BASIC_PASSWORD:-password}" \
-        --role="${WORDPRESS_BASIC_ROLE:-subscriber}" \
+    wp user create "${WORDPRESS_BASIC_USER}" "${WORDPRESS_BASIC_EMAIL}" \
+        --user_pass="${WORDPRESS_BASIC_PASSWORD}" \
+        --role="${WORDPRESS_BASIC_ROLE}" \
         --path=/var/www/html \
         --allow-root
     
-    echo "WordPress installed with admin user: ${WORDPRESS_ADMIN_USER:-admin}"
+    echo "WordPress installed with admin user: ${WORDPRESS_ADMIN_USER}"
 else
     echo "WordPress is already installed."
 fi

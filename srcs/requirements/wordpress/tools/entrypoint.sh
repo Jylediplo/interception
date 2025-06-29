@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# Exit immediately if a command exits with a non-zero status
-# set -e
-
-# Path to wp-config.php
 CONFIG_FILE="/var/www/html/wp-config.php"
 
-# Check if wp-config.php already exists
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Creating wp-config.php..."
 
@@ -43,7 +38,6 @@ else
     echo "wp-config.php already exists. Skipping creation."
 fi
 
-# Wait for database to be ready
 echo "Waiting for database connection..."
 RETRIES=10
 until mysql -h $WORDPRESS_DB_HOST -u $WORDPRESS_DB_USER -p$WORDPRESS_DB_PASSWORD -e "SELECT 1" >/dev/null 2>&1 || [ $RETRIES -eq 0 ]; do
@@ -55,9 +49,7 @@ if [ $RETRIES -eq 0 ]; then
     echo "Failed to connect to database. Continuing anyway..."
 fi
 
-# Install WordPress if not already installed
 if ! $(wp core is-installed --allow-root --path=/var/www/html 2>/dev/null); then
-    # Install wp-cli if not already installed
     if [ ! -f "/usr/local/bin/wp" ]; then
         echo "Installing wp-cli..."
         curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -66,7 +58,6 @@ if ! $(wp core is-installed --allow-root --path=/var/www/html 2>/dev/null); then
     fi
     
     echo "Installing WordPress..."
-    # Install WordPress core
     wp core install \
         --path=/var/www/html \
         --url="${WORDPRESS_URL}" \
@@ -89,9 +80,6 @@ else
     echo "WordPress is already installed."
 fi
 
-# Fix permissions
 chown -R www-data:www-data /var/www/html
 
-
-# Start PHP-FPM
 exec php-fpm7.4 --nodaemonize
